@@ -63,3 +63,6 @@ target_link_libraries(${PROJECT_NAME} assimp glfw
                       BulletDynamics BulletCollision LinearMath)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
+${PROJECT_SOURCE_DIR}/Glitter/Shaders ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Shaders)
