@@ -52,7 +52,7 @@ const char *textFileRead( string filePath, bool fatalError )
                 if( fatalError )
                 {
                     char buffer[256];
-                    sprintf( buffer, "File '%s' is empty\n", fullPath);
+                    sprintf( buffer, "File '%s' is empty\n", fullPath.c_str());
                 }
             }
             
@@ -63,7 +63,7 @@ const char *textFileRead( string filePath, bool fatalError )
             if( fatalError )
             {
                 char buffer[256];
-                sprintf( buffer, "Unable to read file '%s'\n", fullPath);
+                sprintf( buffer, "Unable to read file '%s'\n", fullPath.c_str());
             }
         }
     }
