@@ -9,21 +9,32 @@
 #include <cstdio>
 #include <cstdlib>
 
+using namespace std;
 
-const char *textFileRead( const char *fn, bool fatalError )
+string exePath;
+
+void log_debug(string msg) {
+	puts(msg.c_str());
+}
+
+const char *textFileRead( string filePath, bool fatalError )
 {
     /* Note: the `fatalError' thing is a bit of a hack, The proper course of
      * action would be to have people check the return values of textFileRead,
      * but lets avoid cluttering the lab-code even further.
      */
+
+	string fullPath = exePath + filePath;
     
+	log_debug(fullPath);
+
     FILE *fp;
     char *content = NULL;
     int count = 0;
     
-    if( fn != NULL )
+    if( !filePath.empty() )
     {
-        fp = fopen( fn, "rt" );
+        fp = fopen(fullPath.c_str(), "rt" );
         if( fp != NULL )
         {
             fseek( fp, 0, SEEK_END );
@@ -41,7 +52,7 @@ const char *textFileRead( const char *fn, bool fatalError )
                 if( fatalError )
                 {
                     char buffer[256];
-                    sprintf( buffer, "File '%s' is empty\n", fn );
+                    sprintf( buffer, "File '%s' is empty\n", fullPath);
                 }
             }
             
@@ -52,7 +63,7 @@ const char *textFileRead( const char *fn, bool fatalError )
             if( fatalError )
             {
                 char buffer[256];
-                sprintf( buffer, "Unable to read file '%s'\n", fn );
+                sprintf( buffer, "Unable to read file '%s'\n", fullPath);
             }
         }
     }
@@ -64,6 +75,16 @@ const char *textFileRead( const char *fn, bool fatalError )
 }
 
 int main(int argc, char * argv[]) {
+	string aux(argv[0]);
+
+	#if defined(_WIN32) || defined(WIN32)
+		int pos = aux.rfind('\\');
+	#else
+		int pos = aux.rfind('/');
+	#endif
+	exePath = aux.substr(0, pos + 1);
+
+	log_debug(exePath);
 
     // Load GLFW and Create a Window
     glfwInit();
