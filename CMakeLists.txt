@@ -62,7 +62,11 @@ target_link_libraries(${PROJECT_NAME} assimp glfw
                       ${GLFW_LIBRARIES} ${GLAD_LIBRARIES}
                       BulletDynamics BulletCollision LinearMath)
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Bin)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Bin)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Bin)
 
 file(GLOB PROJECT_SHADERS_REL RELATIVE ${PROJECT_SOURCE_DIR} Glitter/Shaders/*.comp
                           Glitter/Shaders/*.frag
@@ -70,5 +74,5 @@ file(GLOB PROJECT_SHADERS_REL RELATIVE ${PROJECT_SOURCE_DIR} Glitter/Shaders/*.c
                           Glitter/Shaders/*.vert)
 
 foreach(shaderFile ${PROJECT_SHADERS_REL})
-	configure_file(${PROJECT_SOURCE_DIR}/${shaderFile} ${CMAKE_BINARY_DIR}/${shaderFile} COPYONLY)
+	configure_file(${shaderFile} ${shaderFile} COPYONLY)
 endforeach()
