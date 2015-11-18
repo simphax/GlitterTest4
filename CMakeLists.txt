@@ -62,17 +62,15 @@ target_link_libraries(${PROJECT_NAME} assimp glfw
                       ${GLFW_LIBRARIES} ${GLAD_LIBRARIES}
                       BulletDynamics BulletCollision LinearMath)
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Bin)
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Bin)
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Bin)
+    RUNTIME_OUTPUT_DIRECTORY
+        ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Bin
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG
+        ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Bin
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE
+        ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Bin)
 
-file(GLOB PROJECT_SHADERS_REL RELATIVE ${PROJECT_SOURCE_DIR} Glitter/Shaders/*.comp
-                          Glitter/Shaders/*.frag
-                          Glitter/Shaders/*.geom
-                          Glitter/Shaders/*.vert)
+add_custom_target(shader_copy COMMAND ${CMAKE_COMMAND} -E copy_directory
+                   ${PROJECT_SOURCE_DIR}/Glitter/Shaders/
+                   ${CMAKE_BINARY_DIR}/Glitter/Shaders/)
 
-foreach(shaderFile ${PROJECT_SHADERS_REL})
-	configure_file(${shaderFile} ${shaderFile} COPYONLY)
-endforeach()
+add_dependencies(${PROJECT_NAME} shader_copy)
