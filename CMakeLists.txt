@@ -69,8 +69,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_RELEASE
         ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/Bin)
 
-add_custom_target(shader_copy COMMAND ${CMAKE_COMMAND} -E copy_directory
-                   ${PROJECT_SOURCE_DIR}/Glitter/Shaders/
-                   ${CMAKE_BINARY_DIR}/Glitter/Shaders/)
+file(GLOB PROJECT_SHADERS_REL RELATIVE ${PROJECT_SOURCE_DIR} Glitter/Shaders/*.comp
+                          Glitter/Shaders/*.frag
+                          Glitter/Shaders/*.geom
+                          Glitter/Shaders/*.vert)
 
-add_dependencies(${PROJECT_NAME} shader_copy)
+foreach(shaderFile ${PROJECT_SHADERS_REL})
+    add_custom_command(OUTPUT ${shaderFile}
+                       COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/${shaderFile} ${CMAKE_BINARY_DIR}/${shaderFile}
+                       MAIN_DEPENDENCY ${shaderFile})
+endforeach()
